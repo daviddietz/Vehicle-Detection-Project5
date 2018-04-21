@@ -2,8 +2,8 @@ from skimage.feature import hog
 import numpy as np
 import cv2
 
-class FeatureExtractionService:
 
+class FeatureExtractionService(object):
     # Code derived and attributed to Udacity Self Driving Car Program Engineer Nanodegree Program examples lessons
     # Extract features from a list of images
     def extract_features(self, imgs, color_space='RGB', spatial_size=(32, 32),
@@ -45,12 +45,12 @@ class FeatureExtractionService:
                     hog_features = []
                     for channel in range(feature_image.shape[2]):
                         hog_features.append(self.get_hog_features(feature_image[:, :, channel],
-                                                             orient, pix_per_cell, cell_per_block,
-                                                             vis=False, feature_vec=True))
+                                                                  orient, pix_per_cell, cell_per_block,
+                                                                  vis=False, feature_vec=True))
                     hog_features = np.ravel(hog_features)
                 else:
                     hog_features = self.get_hog_features(feature_image[:, :, hog_channel], orient,
-                                                    pix_per_cell, cell_per_block, vis=False, feature_vec=True)
+                                                         pix_per_cell, cell_per_block, vis=False, feature_vec=True)
                 # Append the new feature vector to the features list
                 file_features.append(hog_features)
             features.append(np.concatenate(file_features))
@@ -58,8 +58,7 @@ class FeatureExtractionService:
         return features
 
     # Code derived and attributed to Udacity Self Driving Car Program Engineer Nanodegree Program examples lessons
-    @staticmethod
-    def get_hog_features(image, orient, pix_per_cell, cell_per_block,
+    def get_hog_features(self, image, orient, pix_per_cell, cell_per_block,
                          vis=False, feature_vec=True):
         # Call with two outputs if vis==True
         if vis == True:
