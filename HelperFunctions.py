@@ -1,11 +1,10 @@
-import numpy as np
 import cv2
 import FeatureExtractionService
-
+import numpy as np
 
 # Define a function to draw bounding boxes
 def draw_boxes(img, bboxes, color=(0, 0, 255), thick=6):
-     # Make a copy of the image
+    # Make a copy of the image
     imcopy = np.copy(img)
     # Iterate through the bounding boxes
     for bbox in bboxes:
@@ -115,6 +114,7 @@ def draw_labeled_bboxes(img, labels):
         cv2.rectangle(img, bbox[0], bbox[1], (0, 0, 255), 6)
     # Return the image
     return img
+
 
 def convert_color(img, conv='RGB2YCrCb'):
     if conv == 'RGB2YCrCb':
