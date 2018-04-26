@@ -4,7 +4,7 @@ from sklearn.svm import LinearSVC
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 
-
+# Code derived and attributed to Udacity Self Driving Car Program Engineer Nanodegree Program examples lessons
 def train_linear_svm(car_features, non_car_features):
     t = time.time()
     feature_list = [car_features, non_car_features]
