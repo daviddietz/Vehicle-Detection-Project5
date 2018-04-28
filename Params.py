@@ -14,3 +14,4 @@ class Params:
     hist_feat = True  # Histogram features on or off
     hog_feat = True  # HOG features on or off
     y_start_stop = [375, 660]  # Min and max in y to search in slide_window()
+    n_frames = 25

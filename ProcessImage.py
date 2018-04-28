@@ -1,14 +1,17 @@
 import numpy as np
 import WindowService
+import FindCarService
 from scipy.ndimage.measurements import label
 from Params import Params
 import HelperFunctions
 from Model import Model
 import matplotlib.pyplot as plt
-import cv2
+from collections import deque
 
 
 class Process(object):
+    heatmaps = deque(maxlen=Params.n_frames)
+
     def process_image(self, image):
         test_draw_image = np.copy(image)
         heat = np.zeros_like(image[:, :, 0]).astype(np.float)
@@ -24,8 +27,8 @@ class Process(object):
         #                                            hog_channel=Params.hog_channel, spatial_feat=Params.spatial_feat,
         #                                            hist_feat=Params.hist_feat, hog_feat=Params.hog_feat)
 
-        out_img, bboxes = HelperFunctions.find_cars(image, ystart=Params.y_start_stop[0],
-                                            ystop=Params.y_start_stop[1], scale=1.5, svc=Model.svc,
+        out_img, bboxes = FindCarService.find_cars(image, ystart=375,
+                                            ystop=650, scale=1.5, svc=Model.svc,
                                             X_scaler=Model.X_scaler, orient=Params.orient,
                                             pix_per_cell=Params.pix_per_cell, cell_per_block=Params.cell_per_block,
                                             spatial_size=Params.spatial_size, hist_bins=Params.hist_bins)
@@ -33,8 +36,11 @@ class Process(object):
         # Add heat to each box in box list
         heat = HelperFunctions.add_heat(heat, bboxes)
 
+        self.heatmaps.append(heat)
+        combined = sum(self.heatmaps)
+
         # Apply threshold to help remove false positives
-        heat = HelperFunctions.apply_threshold(heat, 3)
+        heat = HelperFunctions.apply_threshold(combined, 3)
 
         # Visualize the heatmap when displaying
         heatmap = np.clip(heat, 0, 255)
@@ -46,15 +52,15 @@ class Process(object):
 
         if Params.test:
             window_img = HelperFunctions.draw_boxes(test_draw_image, bboxes, color=(0, 0, 255), thick=6)
-            plt.imshow(cv2.cvtColor(window_img, cv2.COLOR_BGR2RGB))
+            plt.imshow(window_img)
             plt.show(block=True)
 
-            print(labels[1], 'cars found')
-            plt.imshow(labels[0], cmap='gray')
+            # print(labels[1], 'cars found')
+            # plt.imshow(labels[0], cmap='gray')
 
             fig = plt.figure()
             plt.subplot(121)
-            plt.imshow(cv2.cvtColor(draw_img, cv2.COLOR_BGR2RGB))
+            plt.imshow(draw_img)
             plt.title('Car Positions')
             plt.subplot(122)
             plt.imshow(heatmap, cmap='hot')

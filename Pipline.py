@@ -5,9 +5,10 @@ from sklearn.externals import joblib
 import FeatureExtractionService
 import ClassifierTrainingService
 from Params import Params
-import cv2
 import random
 from moviepy.editor import VideoFileClip
+import HelperFunctions
+
 
 
 class Pipeline:
@@ -39,8 +40,9 @@ class Pipeline:
         joblib.dump(X_scaler, Params.scaler_filename)
 
     if Params.test:
-        image = cv2.imread('test_images/test4.jpg')
-        Process().process_image(image)
+        images = HelperFunctions.load_images('test_images', '.jpg')
+        for image in images:
+            Process().process_image(image)
 
     project_video = 'DeleteMe_test_video_output.mp4'
     clip1 = VideoFileClip("test_video.mp4")

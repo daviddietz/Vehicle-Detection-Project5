@@ -2,6 +2,7 @@ from skimage.feature import hog
 import time
 import numpy as np
 import cv2
+import HelperFunctions
 
 
 # Code derived and attributed to Udacity Self Driving Car Program Engineer Nanodegree Program examples lessons
@@ -17,7 +18,7 @@ def extract_features(imgs, color_space='RGB', spatial_size=(32, 32),
     for file in imgs:
         file_features = []
         # Read in each one by one
-        image = cv2.imread(file)
+        image = HelperFunctions.read_image(file)
         # apply color conversion if other than 'RGB'
         if color_space != 'RGB':
             if color_space == 'HSV':
