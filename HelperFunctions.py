@@ -78,3 +78,11 @@ def read_image(filename):
         if filename.lower().endswith('.png'):
             cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         return img
+
+
+def deletePickleFile(filename):
+    path = os.getcwd() + "/" + filename
+    try:
+        os.remove(path)
+    except:
+        print("No pickle file saved")

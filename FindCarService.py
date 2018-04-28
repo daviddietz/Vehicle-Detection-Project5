@@ -70,5 +70,4 @@ def find_cars(img, ystart, ystop, scale, svc, X_scaler, orient, pix_per_cell, ce
                     cv2.rectangle(draw_img, (xbox_left, ytop_draw + ystart),
                               (xbox_left + win_draw, ytop_draw + win_draw + ystart), (0, 0, 255), 6)
                     bboxes.append(((xbox_left, ytop_draw+ystart),(xbox_left+win_draw,ytop_draw+win_draw+ystart)))
-
-    return draw_img, bboxes
+    return bboxes

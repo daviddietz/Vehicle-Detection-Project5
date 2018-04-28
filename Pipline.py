@@ -36,15 +36,18 @@ class Pipeline:
 
         svc, X_scaler = ClassifierTrainingService.train_linear_svm(car_features=car_features,
                                                                    non_car_features=non_car_features)
+
         pickle.dump(svc, open(Params.model_file_name, 'wb'))
         joblib.dump(X_scaler, Params.scaler_filename)
+        Params.svc = pickle.load(open(Params.model_file_name, 'rb'))
+        Params.X_scaler = joblib.load(Params.scaler_filename)
 
     if Params.test:
         images = HelperFunctions.load_images('test_images', '.jpg')
         for image in images:
             Process().process_image(image)
 
-    project_video = 'DeleteMe_test_video_output.mp4'
-    clip1 = VideoFileClip("test_video.mp4")
-    test_clip = clip1.fl_image(Process().process_image)
-    test_clip.write_videofile(project_video, audio=False)
+    # project_video = 'test_video_delete_me.mp4'
+    # clip1 = VideoFileClip('test_video_long.mp4')
+    # test_clip = clip1.fl_image(Process().process_image)
+    # test_clip.write_videofile(project_video, audio=False)
