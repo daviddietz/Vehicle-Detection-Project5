@@ -10,7 +10,6 @@ from moviepy.editor import VideoFileClip
 import HelperFunctions
 
 
-
 class Pipeline:
     if Params.train_new_svc:
         cars = glob.glob('training_images/vehicles/*.png')
@@ -24,7 +23,8 @@ class Pipeline:
                                                                  pix_per_cell=Params.pix_per_cell,
                                                                  cell_per_block=Params.cell_per_block,
                                                                  hog_channel=Params.hog_channel,
-                                                                 spatial_feat=True, hist_feat=True, hog_feat=True)
+                                                                 spatial_feat=Params.spatial_feat,
+                                                                 hist_feat=Params.hist_feat, hog_feat=Params.hog_feat)
         non_car_features = FeatureExtractionService.extract_features(not_cars, color_space=Params.color_space,
                                                                      spatial_size=Params.spatial_size,
                                                                      hist_bins=Params.hist_bins,
@@ -32,15 +32,17 @@ class Pipeline:
                                                                      pix_per_cell=Params.pix_per_cell,
                                                                      cell_per_block=Params.cell_per_block,
                                                                      hog_channel=Params.hog_channel,
-                                                                     spatial_feat=True, hist_feat=True, hog_feat=True)
+                                                                     spatial_feat=Params.spatial_feat,
+                                                                     hist_feat=Params.hist_feat,
+                                                                     hog_feat=Params.hog_feat)
 
         svc, X_scaler = ClassifierTrainingService.train_linear_svm(car_features=car_features,
                                                                    non_car_features=non_car_features)
 
         pickle.dump(svc, open(Params.model_file_name, 'wb'))
         joblib.dump(X_scaler, Params.scaler_filename)
-        Params.svc = pickle.load(open(Params.model_file_name, 'rb'))
-        Params.X_scaler = joblib.load(Params.scaler_filename)
+        # Params.svc = pickle.load(open(Params.model_file_name, 'rb'))
+        # Params.X_scaler = joblib.load(Params.scaler_filename)
 
     if Params.test:
         images = HelperFunctions.load_images('test_images', '.jpg')

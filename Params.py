@@ -1,6 +1,6 @@
 class Params:
     train_new_svc = False
-    test = False
+    test = True
     model_file_name = 'svc_model.save'
     scaler_filename = 'scaler.save'
     spatial_size = (32, 32)
@@ -13,5 +13,4 @@ class Params:
     spatial_feat = True  # Spatial features on or off
     hist_feat = True  # Histogram features on or off
     hog_feat = True  # HOG features on or off
-    y_start_stop = [375, 660]  # Min and max in y to search in slide_window()
-    n_frames = 30
+    n_frames = 10
