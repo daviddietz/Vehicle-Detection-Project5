@@ -5,9 +5,9 @@ from sklearn.externals import joblib
 import FeatureExtractionService
 import ClassifierTrainingService
 from Params import Params
-import cv2
 import random
 from moviepy.editor import VideoFileClip
+import HelperFunctions
 
 
 class Pipeline:
@@ -23,7 +23,8 @@ class Pipeline:
                                                                  pix_per_cell=Params.pix_per_cell,
                                                                  cell_per_block=Params.cell_per_block,
                                                                  hog_channel=Params.hog_channel,
-                                                                 spatial_feat=True, hist_feat=True, hog_feat=True)
+                                                                 spatial_feat=Params.spatial_feat,
+                                                                 hist_feat=Params.hist_feat, hog_feat=Params.hog_feat)
         non_car_features = FeatureExtractionService.extract_features(not_cars, color_space=Params.color_space,
                                                                      spatial_size=Params.spatial_size,
                                                                      hist_bins=Params.hist_bins,
@@ -31,18 +32,24 @@ class Pipeline:
                                                                      pix_per_cell=Params.pix_per_cell,
                                                                      cell_per_block=Params.cell_per_block,
                                                                      hog_channel=Params.hog_channel,
-                                                                     spatial_feat=True, hist_feat=True, hog_feat=True)
+                                                                     spatial_feat=Params.spatial_feat,
+                                                                     hist_feat=Params.hist_feat,
+                                                                     hog_feat=Params.hog_feat)
 
         svc, X_scaler = ClassifierTrainingService.train_linear_svm(car_features=car_features,
                                                                    non_car_features=non_car_features)
+
         pickle.dump(svc, open(Params.model_file_name, 'wb'))
         joblib.dump(X_scaler, Params.scaler_filename)
+        # Params.svc = pickle.load(open(Params.model_file_name, 'rb'))
+        # Params.X_scaler = joblib.load(Params.scaler_filename)
 
     if Params.test:
-        image = cv2.imread('test_images/test4.jpg')
-        Process().process_image(image)
+        images = HelperFunctions.load_images('test_images', '.jpg')
+        for image in images:
+            Process().process_image(image)
 
-    project_video = 'DeleteMe_test_video_output.mp4'
-    clip1 = VideoFileClip("test_video.mp4")
-    test_clip = clip1.fl_image(Process().process_image)
-    test_clip.write_videofile(project_video, audio=False)
+    # project_video = 'test_video_delete_me.mp4'
+    # clip1 = VideoFileClip('test_video_long.mp4')
+    # test_clip = clip1.fl_image(Process().process_image)
+    # test_clip.write_videofile(project_video, audio=False)
