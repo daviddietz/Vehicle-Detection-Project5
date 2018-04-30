@@ -41,8 +41,6 @@ class Pipeline:
 
         pickle.dump(svc, open(Params.model_file_name, 'wb'))
         joblib.dump(X_scaler, Params.scaler_filename)
-        # Params.svc = pickle.load(open(Params.model_file_name, 'rb'))
-        # Params.X_scaler = joblib.load(Params.scaler_filename)
 
     if Params.test:
         images = HelperFunctions.load_images('test_images', '.jpg')
