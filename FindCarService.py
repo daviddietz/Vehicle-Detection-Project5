@@ -61,7 +61,7 @@ def find_cars(img, ystart, ystop, scale, svc, X_scaler, orient, pix_per_cell, ce
                 np.hstack((spatial_features, hist_features, hog_features)).reshape(1, -1))
 
             confidence_score = svc.decision_function(test_features)
-            if abs(confidence_score) > 2:
+            if abs(confidence_score) > 2.5:
                 test_prediction = svc.predict(test_features)
                 if test_prediction == 1:
                     xbox_left = np.int(xleft * scale)

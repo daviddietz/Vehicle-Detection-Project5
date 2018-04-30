@@ -10,7 +10,7 @@ from collections import deque
 
 
 class Process(object):
-    cache = deque(maxlen=10)
+    cache = deque(maxlen=25)
 
     def process_image(self, image):
         draw_image = np.copy(image)
