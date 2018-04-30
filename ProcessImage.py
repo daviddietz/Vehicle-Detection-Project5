@@ -10,7 +10,7 @@ from collections import deque
 
 
 class Process(object):
-    heatmaps = deque(maxlen=Params.n_frames)
+    cache = deque(maxlen=10)
 
     def process_image(self, image):
         draw_image = np.copy(image)
@@ -112,19 +112,22 @@ class Process(object):
         # https://stackoverflow.com/questions/952914/making-a-flat-list-out-of-list-of-lists-in-python
         bboxes = [item for sublist in bboxes for item in sublist]
 
-        heatmap = np.zeros_like(image[:, :, 0]).astype(np.float)
+        heat = np.zeros_like(image[:, :, 0]).astype(np.float)
 
         # Add heat to each box in box list
-        heatmap = HelperFunctions.add_heat(heatmap, bboxes)
+        heat = HelperFunctions.add_heat(heat, bboxes)
 
-        self.heatmaps.append(heatmap)
-        combined = sum(self.heatmaps)
+        # Add current heatmap to cache
+        self.cache.append(heat)
 
-        # Apply threshold to help remove false positives
-        heatmap = HelperFunctions.apply_threshold(combined, 3)
+        # Accumulate heatmaps for thresholding, might use average as well
+        heat = np.sum(self.cache, axis=0)
+
+        # Apply a larger threshold as heat from cars should dominate
+        heat = HelperFunctions.apply_threshold(heat, 8)
 
         # Visualize the heatmap when displaying
-        heatmap = np.clip(heatmap, 0, 255)
+        heatmap = np.clip(heat, 0, 255)
 
         # Find final boxes from heatmap using label function
         labels = label(heatmap)

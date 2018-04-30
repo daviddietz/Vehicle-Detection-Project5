@@ -49,7 +49,7 @@ class Pipeline:
         for image in images:
             Process().process_image(image)
 
-    # project_video = 'test_video_delete_me.mp4'
-    # clip1 = VideoFileClip('test_video_long.mp4')
-    # test_clip = clip1.fl_image(Process().process_image)
-    # test_clip.write_videofile(project_video, audio=False)
+    project_video = 'output_video.mp4'
+    clip1 = VideoFileClip('project_video.mp4')
+    test_clip = clip1.fl_image(Process().process_image)
+    test_clip.write_videofile(project_video, audio=False)
