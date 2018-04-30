@@ -1,6 +1,6 @@
 class Params:
     train_new_svc = False
-    test = True
+    test = False
     model_file_name = 'svc_model.save'
     scaler_filename = 'scaler.save'
     spatial_size = (32, 32)
